@@ -103,12 +103,16 @@ You should read the **county.csv** file into a data frame named county_df and
 ```
 
 * What does each row represent?
+Each row represents a  county.
 
 Check the structure of each data.frame and use the `summary` function to begin
 exploring the data. 
 
-* Are there any NA values? No **No NA Values**
-* What differences do you notice between the structure of the two data frames? *The first one is much larger. Also second one just contains one state, MI. vs all states and it has a peninsula field*
+* Are there any NA values? 
+No NA Values
+
+* What differences do you notice between the structure of the two data frames?
+The first one is much larger. Also second one just contains one state, MI. vs all states and it has a peninsula field
 
 ```{r}
 summary(county_df)
@@ -168,10 +172,15 @@ Repeat the histogram but only for counties with less than 1.5 million people. Do
 dplyr to do the filtering - instead, use boolean indexing (see intro to dataframes Rmd file).
 
 ```{r histo_lt1.5m}
-ggplot(county_df) + geom_histogram(aes(TotalPop), fill="#FF9999", colour="black") + 
+
+ggplot(county_df[county_df$TotalPop < "1500000",], aes(x=TotalPop, fill="#FF9999",)) +                          geom_histogram() +
                     ggtitle("Distribution of population for US counties") +
                     xlab("Total Population") +
-                    ylab("Number of counties")
+                    ylab("Number of counties") 
+
+
+
+
 
 ```
 
@@ -196,8 +205,15 @@ your graph has a title and good axis labels.
 Do the peninsulas 
 differ with respect to distribution of median income over the counties?
 
+Both Peninsulas main distribution of county median income is around 40,000. The Lower Peninsula has a broader distribution than the Upper Peninsula but the bulk of counties have an income slightly higher than 40,000 while the with the distribution for the Upper Peninsula, the bulk of counties income is slightly lower than 40,000.
+
 
 ```{r vp_inc_by_peninsula}
+ggplot(county_MI) + geom_violin(aes(x = peninsula, y = Income, fill="#FF9999")) +
+                 theme(axis.title.x = element_text(face="bold", colour="steelblue", size=20), axis.text.x  = element_text(angle=0, hjust =.50, size=10)) +
+                theme(axis.title.y = element_text(face="bold", colour="steelblue", size=20), axis.text.y  = element_text(angle=0, hjust=.50, size=10)) +
+ggtitle("Distribution of Income by Peninsula")
+           
 
 ```
 
@@ -205,22 +221,52 @@ Create several boxplots showing how the peninsulas compare with respect to
 some of the other variables. Summarize your findings in a few short paragraphs.
 
 ```{r boxplots}
+ggplot(county_MI) + geom_boxplot(aes(x = peninsula, y = Men, fill="#FF9999")) +
+                 theme(axis.title.x = element_text(face="bold", colour="steelblue", size=20), axis.text.x  = element_text(angle=0, hjust =.50, size=10)) +
+                theme(axis.title.y = element_text(face="bold", colour="steelblue", size=20), axis.text.y  = element_text(angle=0, hjust=.50, size=10)) +
+ggtitle("Distribution of Men by Peninsula")
+
+ggplot(county_MI) + geom_boxplot(aes(x = peninsula, y = Women, fill="#FF9999")) +
+                 theme(axis.title.x = element_text(face="bold", colour="steelblue", size=20), axis.text.x  = element_text(angle=0, hjust =.50, size=10)) +
+                theme(axis.title.y = element_text(face="bold", colour="steelblue", size=20), axis.text.y  = element_text(angle=0, hjust=.50, size=10)) +
+ggtitle("Distribution of Women by Peninsula")
+
+ggplot(county_MI) + geom_boxplot(aes(x = peninsula, y = Black, fill="#FF9999")) +
+                 theme(axis.title.x = element_text(face="bold", colour="steelblue", size=20), axis.text.x  = element_text(angle=0, hjust =.50, size=10)) +
+                theme(axis.title.y = element_text(face="bold", colour="steelblue", size=20), axis.text.y  = element_text(angle=0, hjust=.50, size=10)) +
+ggtitle("Distribution of African Americans by Peninsula")
+
+ggplot(county_MI) + geom_boxplot(aes(x = peninsula, y = Citizen, fill="#FF9999")) +
+                 theme(axis.title.x = element_text(face="bold", colour="steelblue", size=20), axis.text.x  = element_text(angle=0, hjust =.50, size=10)) +
+                theme(axis.title.y = element_text(face="bold", colour="steelblue", size=20), axis.text.y  = element_text(angle=0, hjust=.50, size=10)) +
+ggtitle("Distribution of Citizens by Peninsula") 
 
 ```
+In the plot Distribution of Men by Peninsula, you can see that there is obviously more men in the Lower Peninsula. The distribution is greater. There are even some counties with outlier numbers of men in them. A lot of these outliers occur in the 4th Quartile. This plot shows a county with the max of about 800,000 men. In the Upper Peninsula the median number of men per county is lower than the Lower Peninsula. The distribution there is a lot closer together. The county with the most men looks like it is a max number of about 20,000/30,000.
+
+In the plot Distribution of Women by Peninsula, you can see that there is obviously more Women in the Lower Peninsula. The distribution is greater. There are even some counties with outlier numbers of women in them. A lot of these outliers occur in the 4th Quartile. This plot shows a county with the max of 900,000 women. In the Upper Peninsula the median number of Women per county is lower than the Lower Peninsula. The distribution there is a lot closer together. The county with the most women looks like it is a max number of about 30,000/40,000.
+
+In the plot Distribution of African Americans by Peninsula, you can see that there is obviously more Blacks in the Lower Peninsula. The distribution is greater. There are even some counties with outlier percentages of Blacks in them. A lot of these outliers occur in the 4th Quartile. This plot shows a county with a max percent of about 40% Blacks. In the Upper Peninsula the median percentage of Blacks per county is lower than the Lower Peninsula. The distribution there is a lot closer together. The county with the most women looks like it is a max percentage of about 18%.
+
+In the plot Distribution of Citizens by Peninsula, you can see that there are more Citizens in the Lower Peninsula. The distribution is greater. There are even some counties with outlier number of Citizens in them. A lot of these outliers occur in the 4th Quartile. This plot shows a counties with a max percent of about 1 million Citizens in them. In the Upper Peninsula the median number of Citizens per county is lower than the Lower Peninsula. The distribution there is a lot closer together. The county with the most Citizens in it looks like it is a max of about 30,000.
+
+### Problem 5
 
 In county_df you'll see that there's a Region field. Create a set of faceted 
 histograms showing how unemployment rate compares by region.  Make sure your graph has a title and good axis
 labels. 
 
 ```{r faceted_histo}
-ggplot(data = county_df) + ???
-
+ggplot(data = county_df) + geom_histogram(aes(Unemployment), fill="#FF9999", colour="black")                  +  ggtitle("Distribution of Unemployment for US Counties by Region") +
+                    xlab("Unemployment Percentage") +
+                    ylab("Number of counties") +
+      facet_wrap(~Region)
 ```
 
 Now do a group of boxplots of mean commute time by region.
 
 ```{r bp_commute_region}
-ggplot(data = county_df) + ???
+ggplot(data = county_df) + 
   
   
   
