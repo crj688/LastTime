@@ -102,17 +102,18 @@ You should read the **county.csv** file into a data frame named county_df and
  county_MI <- read.table("data/county_MI.csv", header=TRUE, sep=",", stringsAsFactors=FALSE)
 ```
 
-* What does each row represent?
-Each row represents a  county.
+*What does each row represent?*
+Each row represents a county.
 
 Check the structure of each data.frame and use the `summary` function to begin
 exploring the data. 
 
-* Are there any NA values? 
-No NA Values
+*Are there any NA values?* 
+Yes there are NA Values. 1 for Income, IncomeErr, and Child Poverty in County_DF.
+None in County_MI
 
-* What differences do you notice between the structure of the two data frames?
-The first one is much larger. Also second one just contains one state, MI. vs all states and it has a peninsula field
+*What differences do you notice between the structure of the two data frames?*
+The first one is much larger. Also second one just contains one state, MI. vs all states and it has a peninsula field.
 
 ```{r}
 summary(county_df)
@@ -133,17 +134,15 @@ for that county. You do **NOT** need to compute a median. The values are the med
 
 Create a histogram, boxplot, kernel density plot and violin plot for median
 income for the entire US. 
-Write a short paragraph describing the distribution of median incomes.
+
+*Write a short paragraph describing the distribution of median incomes.*
+The median income is around 45,000 for the entire country, USA. This is stated in the summary and it shows in the distribution amongst all of the plots below. The outlier incomes are 4th quartile. Over 500 counties have an average income of 45,000.
 
 ```{r}
 ggplot(county_df) + geom_histogram(aes(Income), fill="#FF9999", colour="black")
-ggplot(county_df) + geom_boxplot(aes(x=State, y=Income)) + 
-                 theme(axis.title.x = element_text(face="bold", colour="steelblue", size=20),
-           axis.text.x  = element_text(angle=90, vjust=0.5, size=10))
+ggplot(county_df) + geom_boxplot(aes(x= "USA", y=Income, fill="#FF9999"))
 ggplot(county_df) + geom_density(aes(Income), fill="#FF9999", colour="black")
-ggplot(county_df) + geom_violin(aes(x=State, y=Income)) + 
-                 theme(axis.title.x = element_text(face="bold", colour="steelblue", size=20),
-           axis.text.x  = element_text(angle=90, vjust=0.5, size=10))
+ggplot(county_df) + geom_violin(aes(x= "USA", y=Income, fill="#FF9999"))
 ```
 
 ### Problem 3 - Histogram of total population
@@ -178,10 +177,6 @@ ggplot(county_df[county_df$TotalPop < "1500000",], aes(x=TotalPop, fill="#FF9999
                     xlab("Total Population") +
                     ylab("Number of counties") 
 
-
-
-
-
 ```
 
 
@@ -202,11 +197,9 @@ numbins_FD <- function(data_col){
 Create a grouped violin plot showing Income by peninsula. Make sure
 your graph has a title and good axis labels.
 
-Do the peninsulas 
-differ with respect to distribution of median income over the counties?
-
+*Do the peninsulas differ with respect to distribution of median income over the counties?*
 Both Peninsulas main distribution of county median income is around 40,000. The Lower Peninsula has a broader distribution than the Upper Peninsula but the bulk of counties have an income slightly higher than 40,000 while the with the distribution for the Upper Peninsula, the bulk of counties income is slightly lower than 40,000.
-
+Both Pennisulas, Michigan all together have a slightly lower median income than the country as a whole.
 
 ```{r vp_inc_by_peninsula}
 ggplot(county_MI) + geom_violin(aes(x = peninsula, y = Income, fill="#FF9999")) +
@@ -242,12 +235,16 @@ ggplot(county_MI) + geom_boxplot(aes(x = peninsula, y = Citizen, fill="#FF9999")
 ggtitle("Distribution of Citizens by Peninsula") 
 
 ```
+*Distribution of Men by Peninsula*
 In the plot Distribution of Men by Peninsula, you can see that there is obviously more men in the Lower Peninsula. The distribution is greater. There are even some counties with outlier numbers of men in them. A lot of these outliers occur in the 4th Quartile. This plot shows a county with the max of about 800,000 men. In the Upper Peninsula the median number of men per county is lower than the Lower Peninsula. The distribution there is a lot closer together. The county with the most men looks like it is a max number of about 20,000/30,000.
 
+*Distribution of Women by Peninsula*
 In the plot Distribution of Women by Peninsula, you can see that there is obviously more Women in the Lower Peninsula. The distribution is greater. There are even some counties with outlier numbers of women in them. A lot of these outliers occur in the 4th Quartile. This plot shows a county with the max of 900,000 women. In the Upper Peninsula the median number of Women per county is lower than the Lower Peninsula. The distribution there is a lot closer together. The county with the most women looks like it is a max number of about 30,000/40,000.
 
+*Distribution of Blacks by Peninsula*
 In the plot Distribution of African Americans by Peninsula, you can see that there is obviously more Blacks in the Lower Peninsula. The distribution is greater. There are even some counties with outlier percentages of Blacks in them. A lot of these outliers occur in the 4th Quartile. This plot shows a county with a max percent of about 40% Blacks. In the Upper Peninsula the median percentage of Blacks per county is lower than the Lower Peninsula. The distribution there is a lot closer together. The county with the most women looks like it is a max percentage of about 18%.
 
+*Distribution of Citizens by Peninsula*
 In the plot Distribution of Citizens by Peninsula, you can see that there are more Citizens in the Lower Peninsula. The distribution is greater. There are even some counties with outlier number of Citizens in them. A lot of these outliers occur in the 4th Quartile. This plot shows a counties with a max percent of about 1 million Citizens in them. In the Upper Peninsula the median number of Citizens per county is lower than the Lower Peninsula. The distribution there is a lot closer together. The county with the most Citizens in it looks like it is a max of about 30,000.
 
 ### Problem 5
@@ -266,7 +263,12 @@ ggplot(data = county_df) + geom_histogram(aes(Unemployment), fill="#FF9999", col
 Now do a group of boxplots of mean commute time by region.
 
 ```{r bp_commute_region}
-ggplot(data = county_df) + 
+ggplot(data = county_df) +  geom_boxplot(aes(x= "Average Commute Time", y = MeanCommute,   
+                                         fill="#FF9999")) +                 
+                ggtitle("Distribution of Average Commute Time for Counties by Region") +
+                xlab("Average Commute Time") +
+                ylab("Number of counties") +
+      facet_wrap(~Region)
   
   
   
@@ -279,7 +281,11 @@ your graph has a title and good axis labels. Figure out how to format the
 x-axis labels so that they don't obscure each other.
 
 ```{r bar_counties_by_division}
-ggplot(county_df) + ???
+ggplot(county_df) + geom_bar(aes(x = Division, stat = "count", fill="#FF9999")) +
+                 theme(axis.title.x = element_text(face="bold", colour="steelblue", size=20),                  axis.text.x  = element_text(angle=90, hjust =.50, size=10)) +
+                 theme(axis.title.y = element_text(face="bold", colour="steelblue", size=20),                 axis.text.y  = element_text(angle=0, hjust=.50, size=10)) +
+ggtitle("Counties by Division")
+
 
 ```
 
@@ -289,6 +295,8 @@ Create a scatter plot using the Michigan only data frame comparing
 Income and MeanCommute.
 
 ```{r xy_inc_commute}
+ggplot(county_MI) + 
+  geom_point(aes(x=Income, y=MeanCommute))
 
 ```
 
@@ -296,33 +304,68 @@ Create a modified version of the above scatter plot in which the point color
 is mapped to peninsula and the size is mapped to total population.
 
 ```{r xy_inc_commute_peninsula}
-
+ggplot(county_MI) + 
+  geom_point(aes(x=Income, y=MeanCommute, colour=peninsula, size=TotalPop))
 ```
 
-Your thoughts on the relationship between these variables?
+*Your thoughts on the relationship between these variables?*
+Well it seems as in counties with a higher average income people have a longer average commute time to work. It could be that counties with a lower average income people may make use of public transportation or have non relaible transportaion, therefore people tend to take jobs that are closer to home. One of the counties with the one of the largest poopulations of at least 1.5 million in Michigan has average income of about 43,000 and an average commute of 25 minutes to work.
 
 Now, create a few more scatter plots using variables of your choosing in which
 you facet by peninsula as well. How do the relationships compare across the
 peninsulas?
 
 ```{r xy_faceted_peninsula}
+ggplot(county_MI) + 
+  geom_point(aes(x=Income, y=Black, colour=peninsula, size=TotalPop)) +
+  ggtitle("Correlation of Blacks and Income by Peninsula") +
+  facet_wrap(~peninsula)
+
+ggplot(county_MI) + 
+  geom_point(aes(x=Unemployment, y=Black, colour=peninsula, size=TotalPop)) +
+  ggtitle("Correlation of Blacks and Unemployment by Peninsula") +
+  facet_wrap(~peninsula)
+
+ggplot(county_MI) + 
+  geom_point(aes(x=SelfEmployed, y=Black, colour=peninsula, size=TotalPop)) +
+  ggtitle("Correlation of Blacks and Self Employment by Peninsula") +
+  facet_wrap(~peninsula)
 
 ```
+*Correlation of Blacks and Income by Peninsula*
+Well it seems as in counties with about 3% of African Americans have an average income of 45,000 and have a total population of 500,000 or less in the Lower Peninsula. One of the counties is an outlier with about 40% of African Americans and an average income of 45,000 and a Total Population of at least 1.5 million in the Lower Peninsula. In the Upper Peninsula, there is only one county, which is an outlier that has about 18% of African Americans. The rest of the counties have below 10% of Blacks. Each of the counties in the Upper Peninsula have less than 500,000 as Total Population and there is less than 10% of African Americans in these counties. There is one outlier county with about 18% of African Americans. In the Upper Peninsula, it looks like the average unemployment rate for African Americans is about 9%.
 
+*Correlation of Blacks and Unemployment by Peninsula*
+Well it seems as in counties with a higher population (1 million people or more) have about at least 10% of African Americans in the Lower Peninsula. The average unemployment rate for African Americans per county in the Lower Peninsula looks to be around 9%. There is an outlier county of a total population of 1.5 million with 40% of African Americans. They make up 16% of the unemployment rate in that county in the Lower Peninsula. In the Upper Peninsula, there are no counties with Total Poulations more than 500,000. is an outlier with about 40% of African Americans and an average income of 45,000 and a Total Population of at least 1.5 million in the Lower Peninsula. In the Upper Peninsula, there is only one county, which is an outlier that has about 18% of African Americans. The rest of the counties have below 10%. Each of the counties in the Upper Peninsula have less than 500,000 as Total Population and the average income for African Americans in each county in the Upper Peninsula is around 40,000.
+
+*Correlation of Blacks and Self Employment by Peninsula*
+Well it seems as in the points in this plot are skewed to the left and up for the percentage of African Americans, per county that are Self Employed in the Lower Peninsula. Meaning that the counties with the highest population as well as pergentage of blacks have tend to have very low percentages of blacks that are Self Employed. In the Upper Peninsula the points in this plot are somewhat similar to the Lower Peninsula. There is a light skew to the left and up.
 
 Now use the full US data frame.
 
 Create a scatter plot of TotalPop by Income.
 
 ```{r xy_pop_inc}
+ggplot(county_df) + 
+  geom_point(aes(x=Income, y=TotalPop)) +
+  ggtitle("Correlation of Total Population by Income for the USA")
 
 ```
 
 The widely varying values make this difficult to interpret in terms of looking
 for patterns. So, figure out a way to either change the axis scales or 
 the plotted data itself to use a base 10 logarithmic scale (or transform).
-Write a short paragraph on why one might want to use a log scale or log
-transform of data when plotting.
+*Write a short paragraph on why one might want to use a log scale or logtransform of data when plotting.*
+One may user log scale when looking at percent change is more important than the
+actual change in value. One may also use log scale when data is highly skewed which can cause a majority of the values to be compressed into one small portion of your plot. Also, one may log transform data to try to change a non-linear relationship into a linear relationship
+
+```{r}
+ggplot(county_df) + 
+  geom_point(aes(x=log(Income), y=TotalPop)) +
+  ggtitle("Correlation of Total Population by Income for the USA")
+
+```
+
 
 ### Hacker Extra - More analysis
 
