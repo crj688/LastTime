@@ -172,10 +172,9 @@ dplyr to do the filtering - instead, use boolean indexing (see intro to datafram
 
 ```{r histo_lt1.5m}
 
-ggplot(county_df[county_df$TotalPop < "1500000",], aes(x=TotalPop, fill="#FF9999",)) +                          geom_histogram() +
-                    ggtitle("Distribution of population for US counties") +
-                    xlab("Total Population") +
-                    ylab("Number of counties") 
+ggplot(county_df[county_df$TotalPop < 1500000,], aes(x=TotalPop, fill="#FF9999")) +                           geom_histogram() + ggtitle("Distribution of population for US counties") +
+                                      xlab("Total Population") +
+                                      ylab("Number of counties") 
 
 ```
 
